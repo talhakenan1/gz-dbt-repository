@@ -3,10 +3,44 @@ version: 2
 sources:
   - name: raw
     schema: gz_raw_data
+    description: "Greenweez ham veri kümesi (Tüm verilerin ana kaynağı)"
     tables:
       - name: sales
         identifier: raw_gz_sales
+        description: "Satış işlemlerinin tutulduğu ham tablo"
+        tests:
+          - unique:
+              column_name: "(orders_id || '-' || pdt_id)"
+        columns:
+          - name: orders_id
+            description: "Sipariş numarası"
+          - name: pdt_id
+            description: "Ürün numarası"
+
       - name: product
         identifier: raw_gz_product
+        description: "Ürün bilgilerinin tutulduğu ham tablo"
+        columns:
+          - name: products_id
+            description: "Benzersiz ürün numarası (Birincil Anahtar)"
+            tests:
+              - unique
+              - not_null
+          - name: purchse_price
+            description: "Ürünün satın alma fiyatı"
+
       - name: ship
         identifier: raw_gz_ship
+        description: "Kargo ve lojistik bilgilerinin tutulduğu ham tablo"
+        columns:
+          - name: orders_id
+            description: "Sipariş numarası (Birincil Anahtar)"
+            tests:
+              - unique
+              - not_null
+          - name: shipping_fee
+            description: "Kargo ücreti"
+          - name: logcost
+            description: "Lojistik maliyeti"
+          - name: ship_cost
+            description: "Kargo maliyeti"
